@@ -6,6 +6,7 @@ import {
   getAmbulances,
   getLatestAmbulanceLocations,
 } from "./lib/armsApi"
+import OperationsMap from "./components/OperationsMap"
 import { supabase } from "./lib/supabase"
 import type {
   Ambulance,
@@ -224,11 +225,14 @@ function App() {
           schema: "public",
           table: "ambulance_locations",
         },
-        () => {
+        (payload) => {
+          console.log("ARMS REALTIME LOCATION EVENT:", payload)
           loadDashboard()
         },
       )
-      .subscribe()
+      .subscribe((status) => {
+        console.log("ARMS REALTIME SUBSCRIPTION STATUS:", status)
+      })
 
     return () => {
       supabase.removeChannel(channel)
@@ -626,7 +630,22 @@ function App() {
           </div>
         </section>
 
-        <section className="panel dispatch-panel">
+        <section className="panel">
+        <div className="panel-header">
+          <div>
+            <h2>Operations Map</h2>
+            <p>Live ambulance and incident locations</p>
+          </div>
+        </div>
+
+        <OperationsMap
+          ambulances={ambulances}
+          locations={locations}
+          incidents={incidents}
+        />
+      </section>
+
+      <section className="panel dispatch-panel">
           <div className="panel-header">
             <h2>Dispatch Ambulance</h2>
           </div>

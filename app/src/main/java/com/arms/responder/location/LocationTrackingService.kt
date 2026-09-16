@@ -24,6 +24,8 @@ class LocationTrackingService : Service() {
 
     private lateinit var fused: FusedLocationProviderClient
 
+    private var locationCount = 0
+
     private val serviceScope =
         CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
@@ -34,6 +36,12 @@ class LocationTrackingService : Service() {
         override fun onLocationResult(result: LocationResult) {
 
             for (location in result.locations) {
+
+                locationCount++
+
+                updateLocationNotification(
+                    "GPS #$locationCount - uploading..."
+                )
 
                 val latitude = location.latitude
                 val longitude = location.longitude
@@ -61,13 +69,33 @@ class LocationTrackingService : Service() {
 
                 serviceScope.launch {
 
-                    repository.sendLocation(
+                    val result = repository.sendLocation(
                         latitude = latitude,
                         longitude = longitude,
                         accuracyMeters = accuracy,
                         speedKmh = speedKmh,
                         heading = heading
                     )
+
+                    if (result.isFailure) {
+                        val errorMessage =
+                            result.exceptionOrNull()?.message
+                                ?: "Unknown error"
+
+                        updateLocationNotification(
+                            "GPS #$locationCount - FAILED: ${errorMessage.take(80)}"
+                        )
+
+                        android.util.Log.e(
+                            "ARMS_LOCATION",
+                            "Failed to send location: $errorMessage",
+                            result.exceptionOrNull()
+                        )
+                    } else {
+                        updateLocationNotification(
+                            "GPS #$locationCount - uploaded successfully"
+                        )
+                    }
                 }
             }
         }
@@ -135,11 +163,30 @@ class LocationTrackingService : Service() {
         )
     }
 
+    private fun updateLocationNotification(text: String) {
+        val notification = NotificationCompat.Builder(
+            this,
+            "arms_location"
+        )
+            .setContentTitle("ARMS location tracking")
+            .setContentText(text)
+            .setSmallIcon(android.R.drawable.ic_menu_mylocation)
+            .setOngoing(true)
+            .build()
+
+        getSystemService(NotificationManager::class.java)
+            .notify(1001, notification)
+    }
+
     override fun onStartCommand(
         intent: Intent?,
         flags: Int,
         startId: Int
     ): Int {
+
+        updateLocationNotification(
+            "GPS service active - waiting for location"
+        )
 
         startUpdates()
 

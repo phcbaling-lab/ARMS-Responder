@@ -66,6 +66,16 @@ fun ARMSApp(
                         Manifest.permission.ACCESS_COARSE_LOCATION
                     )
                 )
+            } else {
+                val intent = Intent(
+                    context,
+                    com.arms.responder.location.LocationTrackingService::class.java
+                )
+
+                ContextCompat.startForegroundService(
+                    context,
+                    intent
+                )
             }
         }
     }

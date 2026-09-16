@@ -401,6 +401,7 @@ private data class DeviceInsertRecord(
     @SerialName("is_active")
     val isActive: Boolean = true
 )
+    @Serializable
     private data class AmbulanceLocationInsert(
         @SerialName("ambulance_id")
         val ambulanceId: String,
