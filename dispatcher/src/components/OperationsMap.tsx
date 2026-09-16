@@ -17,6 +17,10 @@ interface OperationsMapProps {
   ambulances: Ambulance[]
   locations: AmbulanceLocation[]
   incidents: Incident[]
+  selectedIncidentId: string | null
+  selectedAmbulanceId: string | null
+  onSelectIncident: (incidentId: string) => void
+  onSelectAmbulance: (ambulanceId: string) => void
 }
 
 function createAmbulanceIcon(status: Ambulance["status"]) {
@@ -50,6 +54,10 @@ export default function OperationsMap({
   ambulances,
   locations,
   incidents,
+  selectedIncidentId,
+  selectedAmbulanceId,
+  onSelectIncident,
+  onSelectAmbulance,
 }: OperationsMapProps) {
   const latestLocations = new Map<string, AmbulanceLocation>()
 
@@ -107,6 +115,12 @@ export default function OperationsMap({
                 location.longitude,
               ]}
               icon={createAmbulanceIcon(ambulance.status)}
+              opacity={
+                selectedAmbulanceId === ambulance.id ? 1 : 0.75
+              }
+              eventHandlers={{
+                click: () => onSelectAmbulance(ambulance.id),
+              }}
             >
               <Popup>
                 <strong>{ambulance.vehicle_number}</strong>
@@ -137,6 +151,12 @@ export default function OperationsMap({
               incident.longitude!,
             ]}
             icon={createIncidentIcon(incident.priority)}
+            opacity={
+              selectedIncidentId === incident.id ? 1 : 0.65
+            }
+            eventHandlers={{
+              click: () => onSelectIncident(incident.id),
+            }}
           >
             <Popup>
               <strong>{incident.incident_number}</strong>
@@ -152,6 +172,35 @@ export default function OperationsMap({
           </Marker>
         ))}
       </MapContainer>
+
+      <div className="operations-map-legend">
+        <strong>MAP LEGEND</strong>
+
+        <div className="map-legend-item">
+          <span className="map-legend-ambulance">🚑</span>
+          <span>Ambulance</span>
+        </div>
+
+        <div className="map-legend-item">
+          <span className="map-legend-active">🚑</span>
+          <span>Active / Responding</span>
+        </div>
+
+        <div className="map-legend-item">
+          <span className="map-legend-incident priority-red">!</span>
+          <span>RED Priority</span>
+        </div>
+
+        <div className="map-legend-item">
+          <span className="map-legend-incident priority-yellow">!</span>
+          <span>YELLOW Priority</span>
+        </div>
+
+        <div className="map-legend-item">
+          <span className="map-legend-incident priority-green">!</span>
+          <span>GREEN Priority</span>
+        </div>
+      </div>
     </div>
   )
 }

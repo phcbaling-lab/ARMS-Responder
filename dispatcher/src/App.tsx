@@ -642,6 +642,10 @@ function App() {
           ambulances={ambulances}
           locations={locations}
           incidents={incidents}
+          selectedIncidentId={selectedIncidentId}
+          selectedAmbulanceId={selectedAmbulanceId}
+          onSelectIncident={setSelectedIncidentId}
+          onSelectAmbulance={setSelectedAmbulanceId}
         />
       </section>
 
