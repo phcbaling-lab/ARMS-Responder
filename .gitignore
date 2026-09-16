@@ -7,3 +7,23 @@ captures/
 local.properties
 google-services.json
 *.iml
+
+# Firebase service-account credentials
+*-firebase-adminsdk-*.json
+
+# Android APKs
+*.apk
+
+# Node dependencies
+node_modules/
+
+# Local environment files
+.env
+.env.*
+dispatcher/.env.local
+
+# Generated Dispatcher files
+dispatcher/dist/
+
+# Archives
+*.zip
