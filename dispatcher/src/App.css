@@ -628,3 +628,84 @@ button {
 .map-legend-incident.priority-green {
   background: #16a34a;
 }
+
+
+.dispatch-panel {
+  margin-top: 20px;
+}
+
+.dispatch-panel .panel-header h2 {
+  margin-bottom: 0;
+}
+
+.dispatch-controls {
+  display: grid;
+  grid-template-columns: 1fr 1fr auto;
+  gap: 14px;
+  align-items: stretch;
+}
+
+.dispatch-selection {
+  padding: 14px 16px;
+  background: #f7f9fc;
+  border: 1px solid #d9dee7;
+  border-radius: 10px;
+}
+
+.dispatch-selection strong {
+  display: block;
+  margin-bottom: 6px;
+  color: #64748b;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+}
+
+.dispatch-selection div {
+  min-height: 20px;
+  font-weight: 700;
+  color: #172033;
+}
+
+.dispatch-button {
+  min-width: 150px;
+  padding: 0 22px;
+  border: none;
+  border-radius: 10px;
+  background: #dc2626;
+  color: white;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+}
+
+.dispatch-button:hover:not(:disabled) {
+  background: #b91c1c;
+}
+
+.dispatch-button:disabled {
+  background: #cbd5e1;
+  color: #64748b;
+  cursor: not-allowed;
+}
+
+.dispatch-message {
+  margin-top: 12px;
+  padding: 11px 14px;
+  border-radius: 8px;
+  background: #eef6ff;
+  border: 1px solid #bfdbfe;
+  color: #1e40af;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+@media (max-width: 800px) {
+  .dispatch-controls {
+    grid-template-columns: 1fr;
+  }
+
+  .dispatch-button {
+    min-height: 48px;
+  }
+}
